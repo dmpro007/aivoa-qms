@@ -24,6 +24,8 @@ class ComplaintCreate(BaseModel):
     dosageForm: str | None = None
     strength: str | None = None
     batchNumber: str | None = None
+    manufactureDate: str | None = None
+    expirationDate: str | None = None
 
     category: str | None = None
     description: str | None = None
@@ -48,6 +50,8 @@ def create_complaint(
 
     complaint = Complaint(
 
+        complaint_source=complaint_data.complaintSource,
+        complaint_category=complaint_data.complaintCategory,
         customer_name=complaint_data.customerName,
         organization=complaint_data.organization,
         email=complaint_data.email,
@@ -58,6 +62,8 @@ def create_complaint(
         dosage_form=complaint_data.dosageForm,
         strength=complaint_data.strength,
         batch_number=complaint_data.batchNumber,
+        manufacture_date=complaint_data.manufactureDate,
+        expiration_date=complaint_data.expirationDate,
 
         category=complaint_data.category,
         description=complaint_data.description,
@@ -142,6 +148,8 @@ def get_complaint(
         "success": True,
         "data": {
             "id": complaint.id,
+            "complaint_source": complaint.complaint_source,
+            "complaint_category": complaint.complaint_category,
             "customer_name": complaint.customer_name,
             "organization": complaint.organization,
             "email": complaint.email,
@@ -152,6 +160,8 @@ def get_complaint(
             "dosage_form": complaint.dosage_form,
             "strength": complaint.strength,
             "batch_number": complaint.batch_number,
+            "manufacture_date": complaint.manufacture_date,
+            "expiration_date": complaint.expiration_date,
 
             "category": complaint.category,
             "description": complaint.description,

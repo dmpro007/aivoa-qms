@@ -22,6 +22,20 @@ import {
 
 import { analyzeComplaint } from "../services/complaintApi";
 
+const CATEGORY_OPTIONS = [
+  "Packaging", "Labeling", "Product Quality", "Contamination",
+  "Foreign Matter", "Appearance", "Dosage", "Quantity",
+  "Wrong Product", "Documentation", "Other",
+];
+
+const matchOption = (value, options) => {
+  if (!value) return "";
+  const found = options.find(
+    (opt) => opt.toLowerCase() === String(value).trim().toLowerCase()
+  );
+  return found || "";
+};
+
 function Copilot() {
   const dispatch = useDispatch();
 
@@ -62,8 +76,12 @@ function Copilot() {
           dosageForm: extracted.dosage_form || "",
           strength: extracted.strength || "",
           batchNumber: extracted.batch_number || "",
-          category: extracted.category || "",
+          category: matchOption(extracted.category, CATEGORY_OPTIONS) || "",
           description: extracted.description || "",
+          source: extracted.source || "",
+          manufacturingDate: extracted.manufacture_date || "",
+          expiryDate: extracted.expiration_date || "",
+          
         })
       );
 
@@ -133,7 +151,7 @@ function Copilot() {
               <button
                 onClick={() =>
                   setMessage(
-                    "ABC Pharmaceuticals reported damaged blister packaging for Paracetamol 500 mg tablets from batch PCT24031."
+                    "New email recieved about packaging complaint from Alex from ABC Pharmaceuticals reported damaged blister packaging for Paracetamol 500 mg tablets from batch PCT24031 manufactured on 2023-01-01 and expires on 2027-02-01 through email."
                   )
                 }
               >

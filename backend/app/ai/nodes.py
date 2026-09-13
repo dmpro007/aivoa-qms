@@ -21,6 +21,7 @@ Return ONLY valid JSON.
 Use exactly these fields:
 
 {{
+    "source": null,
     "customer_name": null,
     "organization": null,
     "product_name": null,
@@ -29,7 +30,9 @@ Use exactly these fields:
     "strength": null,
     "batch_number": null,
     "category": null,
-    "description": null
+    "description": null,
+    "manufacture_date": null,
+    "expiration_date": null
 }}
 
 Rules:
@@ -39,6 +42,14 @@ Rules:
 3. Use "API" or "FDF" for material_type when possible.
 4. Keep the description concise.
 5. Return ONLY JSON.
+6. "source" must be exactly one of: "Email", "Phone", "Web",
+   "Distributor", "Sales Representative" — identify this
+   regardless of where it appears in the complaint text.
+7. "category" must be exactly one of: "Packaging", "Labeling",
+   "Product Quality", "Contamination", "Foreign Matter",
+   "Appearance", "Dosage", "Quantity", "Wrong Product",
+   "Documentation", "Other" — identify this regardless of
+   where it appears in the complaint text.
 
 Complaint:
 
@@ -74,6 +85,8 @@ Complaint:
     except json.JSONDecodeError:
 
         extracted = {
+            "source": None,
+            "category": None,
             "customer_name": None,
             "organization": None,
             "product_name": None,
@@ -82,13 +95,14 @@ Complaint:
             "strength": None,
             "batch_number": None,
             "category": None,
-            "description": None
+            "description": None,
+            "manufactureDate": None,
+            "expirationDate": None
         }
 
     return {
         "extracted_fields": extracted
     }
-
 def check_completeness(state):
 
     fields = state["extracted_fields"]
@@ -98,7 +112,9 @@ def check_completeness(state):
         "product_name",
         "batch_number",
         "category",
-        "description"
+        "description",
+        "manufactureDate",
+        "expirationDate"
     ]
 
     missing = []
@@ -127,6 +143,7 @@ def assess_risk(state):
 
     category = fields.get("category")
     description = fields.get("description")
+    expiration_date = fields.get("expirationDate")
 
     prompt = f"""
 You are a pharmaceutical Quality Risk Management assistant.
@@ -138,6 +155,9 @@ Complaint category:
 
 Description:
 {description}
+
+Expiration date:
+{expiration_date}
 
 Return ONLY JSON:
 
@@ -266,6 +286,7 @@ def analyze_root_cause(state: ComplaintState):
 
     category = extracted.get("category")
     description = extracted.get("description")
+    expiration_date = extracted.get("expirationDate")
 
     prompt = f"""
 You are a pharmaceutical Quality Assurance expert.

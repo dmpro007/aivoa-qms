@@ -28,6 +28,8 @@ Return ONLY valid JSON.
 Required JSON structure:
 
 {{
+    "source": null,
+    "category": null,
     "customer_name": null,
     "organization": null,
     "product_name": null,
@@ -35,6 +37,8 @@ Required JSON structure:
     "dosage_form": null,
     "strength": null,
     "batch_number": null,
+    "manufacture_date": null,
+    "expiration_date": null,
     "category": null,
     "description": null,
     "risk_level": null,
