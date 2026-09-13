@@ -1,13 +1,3 @@
-// function ComplaintDetails() {
-//     return (
-//       <div>
-//         <h1>Complaint Details</h1>
-//       </div>
-//     );
-//   }
-  
-//   export default ComplaintDetails;
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
