@@ -14,6 +14,7 @@ router = APIRouter(
 
 class ComplaintCreate(BaseModel):
 
+    source: str | None = None
     customerName: str | None = None
     organization: str | None = None
     email: str | None = None
@@ -24,8 +25,8 @@ class ComplaintCreate(BaseModel):
     dosageForm: str | None = None
     strength: str | None = None
     batchNumber: str | None = None
-    manufactureDate: str | None = None
-    expirationDate: str | None = None
+    manufacture_date: str | None = None
+    expiration_date: str | None = None
 
     category: str | None = None
     description: str | None = None
@@ -50,8 +51,7 @@ def create_complaint(
 
     complaint = Complaint(
 
-        complaint_source=complaint_data.complaintSource,
-        complaint_category=complaint_data.complaintCategory,
+        source=complaint_data.source,
         customer_name=complaint_data.customerName,
         organization=complaint_data.organization,
         email=complaint_data.email,
@@ -62,8 +62,8 @@ def create_complaint(
         dosage_form=complaint_data.dosageForm,
         strength=complaint_data.strength,
         batch_number=complaint_data.batchNumber,
-        manufacture_date=complaint_data.manufactureDate,
-        expiration_date=complaint_data.expirationDate,
+        manufacture_date=complaint_data.manufacture_date,
+        expiration_date=complaint_data.expiration_date,
 
         category=complaint_data.category,
         description=complaint_data.description,

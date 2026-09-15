@@ -37,6 +37,7 @@ class Complaint(Base):
         String(100),
         nullable=True
     )
+    
 
 
     # Product information
@@ -66,6 +67,16 @@ class Complaint(Base):
         nullable=True
     )
 
+    manufacture_date = Column(
+        String(100),
+        nullable=True
+    )
+
+    expiration_date = Column(
+        String(100),
+        nullable=True
+    )
+
 
     # Complaint information
 
@@ -74,6 +85,10 @@ class Complaint(Base):
         nullable=True
     )
 
+    source = Column(
+    String(100),
+    nullable=True
+    )
     description = Column(
         Text,
         nullable=True

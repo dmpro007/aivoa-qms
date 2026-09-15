@@ -151,7 +151,7 @@ function Copilot() {
               <button
                 onClick={() =>
                   setMessage(
-                    "Arjun from Apollo Pharmaceuticals India reported that Paracetamol 650 mg tablets from batch BHJ24080 were received with reddish layer in the packaging. The customer reports that approximately 15 strips were affected. He called me about this contamination issue. His email is heyarjun112@gmail.com."
+                    "Arjun from Apollo Pharmaceuticals India reported that Paracetamol 650 mg tablets from batch BHJ24080 were received with reddish layer in the packaging. The customer reports that approximately 15 strips were affected. The manufacturing date of the tablets is 10 august 2022 and the expiry date is 29 march 2026. He called me about this contamination issue. His email is heyarjun112@gmail.com."
                   )
                 }
               >

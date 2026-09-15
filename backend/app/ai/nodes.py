@@ -50,6 +50,10 @@ Rules:
    "Appearance", "Dosage", "Quantity", "Wrong Product",
    "Documentation", "Other" — identify this regardless of
    where it appears in the complaint text.
+8. "manufacture_date" and "expiration_date" must be returned in
+   exactly "YYYY-MM-DD" format if a date is found (e.g. "2022-08-10").
+   If the exact day is unknown but month/year is known, use the
+   first day of that month. If no date information is present, use null.
 
 Complaint:
 
@@ -96,8 +100,8 @@ Complaint:
             "batch_number": None,
             "category": None,
             "description": None,
-            "manufactureDate": None,
-            "expirationDate": None
+            "manufacture_date": None,
+            "expiration_date": None
         }
 
     return {
@@ -113,8 +117,8 @@ def check_completeness(state):
         "batch_number",
         "category",
         "description",
-        "manufactureDate",
-        "expirationDate"
+        "manufacture_date",
+        "expiration_date"
     ]
 
     missing = []
