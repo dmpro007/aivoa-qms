@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import NewComplaint from "./pages/NewComplaint";
 import ComplaintDetails from "./pages/ComplaintDetails";
 import Complaints from "./pages/Complaints";
+import Reports from "./pages/Reports";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route path="/complaints" element={<Complaints />} />
           <Route path="/complaints/new" element={<NewComplaint />} />
           <Route path="/complaints/:id" element={<ComplaintDetails />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>
     </div>

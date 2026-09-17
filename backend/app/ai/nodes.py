@@ -147,7 +147,7 @@ def assess_risk(state):
 
     category = fields.get("category")
     description = fields.get("description")
-    expiration_date = fields.get("expirationDate")
+    expiration_date = fields.get("expiration_date")
 
     prompt = f"""
 You are a pharmaceutical Quality Risk Management assistant.
@@ -290,7 +290,7 @@ def analyze_root_cause(state: ComplaintState):
 
     category = extracted.get("category")
     description = extracted.get("description")
-    expiration_date = extracted.get("expirationDate")
+    expiration_date = extracted.get("expiration_date")
 
     prompt = f"""
 You are a pharmaceutical Quality Assurance expert.

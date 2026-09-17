@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { updateComplaintField } from "../store/complaintSlice";
+import { useNavigate } from "react-router-dom";
+import { updateComplaintField, resetComplaint } from "../store/complaintSlice";
 import { createComplaint } from "../services/complaintApi";
 
 
 function ComplaintForm() {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Complaint data from Redux
   const complaint = useSelector(
@@ -31,7 +33,29 @@ function ComplaintForm() {
   };
 
 
+  const REQUIRED_FIELDS = [
+    { field: "source", label: "Complaint Source" },
+    { field: "category", label: "Complaint Category" },
+    { field: "customerName", label: "Customer Name" },
+    { field: "productName", label: "Product Name" },
+    { field: "batchNumber", label: "Batch Number" },
+    { field: "description", label: "Complaint Description" },
+  ];
+
   const handleCommit = async () => {
+
+    const missing = REQUIRED_FIELDS.filter(
+      ({ field }) => !complaint[field] || !complaint[field].trim()
+    );
+
+    if (missing.length > 0) {
+      alert(
+        `Please fill in the required fields: ${missing
+          .map((m) => m.label)
+          .join(", ")}`
+      );
+      return;
+    }
 
     try {
 
@@ -78,9 +102,9 @@ function ComplaintForm() {
       );
 
 
-      alert(
-        `Complaint saved successfully! ID: ${response.complaint_id}`
-      );
+      dispatch(resetComplaint());
+
+      navigate(`/complaints/${response.complaint_id}`);
 
 
     } catch (error) {

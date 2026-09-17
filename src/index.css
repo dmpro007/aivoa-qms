@@ -794,3 +794,130 @@ a {
     }
   
   }
+
+  
+  /* Modify */
+  
+  
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+  /* =========================
+     DESIGN TOKENS
+  ========================= */
+  
+  :root {
+    --color-bg: #f5f7fa;
+    --color-surface: #ffffff;
+    --color-border: #e5e9f0;
+    --color-border-soft: #edf0f4;
+  
+    --color-ink: #172033;
+    --color-ink-soft: #4f5969;
+    --color-muted: #7b8494;
+    --color-muted-soft: #8992a1;
+  
+    --color-accent: #172033;
+    --color-accent-hover: #2a3752;
+  
+    --color-success: #36a269;
+    --color-success-bg: #eafaf1;
+    --color-warning: #d9a441;
+    --color-warning-bg: #fffbeb;
+    --color-danger: #c0392b;
+    --color-danger-bg: #fdf0ee;
+    --color-info: #3f6fd9;
+    --color-info-bg: #eef3fe;
+  
+    --radius-sm: 7px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  
+    --shadow-sm: 0 1px 2px rgba(23, 32, 51, 0.04);
+    --shadow-md: 0 6px 20px rgba(23, 32, 51, 0.06);
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: "Inter", sans-serif;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  button,
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #d7dce4;
+    border-radius: 20px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  
+  /* =========================
+     APP LAYOUT
+  ========================= */
+  
+  .app-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  
+  /* =========================
+     SIDEBAR
+  ========================= */
+  
+  .sidebar {
+    width: 245px;
+    min-height: 100vh;
+    position: sticky;
+    top: 0;
+  
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+  
+    display: flex;
+    flex-direction: column;
+  
+    padding: 24px 16px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  
+    padding: 4px 10px 30px;
+  }
+  

@@ -25,8 +25,8 @@ class ComplaintCreate(BaseModel):
     dosageForm: str | None = None
     strength: str | None = None
     batchNumber: str | None = None
-    manufacture_date: str | None = None
-    expiration_date: str | None = None
+    manufacturingDate: str | None = None
+    expiryDate: str | None = None
 
     category: str | None = None
     description: str | None = None
@@ -62,8 +62,8 @@ def create_complaint(
         dosage_form=complaint_data.dosageForm,
         strength=complaint_data.strength,
         batch_number=complaint_data.batchNumber,
-        manufacture_date=complaint_data.manufacture_date,
-        expiration_date=complaint_data.expiration_date,
+        manufacture_date=complaint_data.manufacturingDate,
+        expiration_date=complaint_data.expiryDate,
 
         category=complaint_data.category,
         description=complaint_data.description,
@@ -127,69 +127,6 @@ def get_complaints(
         ]
     }
 
-@router.get("/stats/{complaint_id}")
-def get_complaint(
-    complaint_id: int,
-    db: Session = Depends(get_db)
-):
-    complaint = (
-        db.query(Complaint)
-        .filter(Complaint.id == complaint_id)
-        .first()
-    )
-
-    if not complaint:
-        raise HTTPException(
-            status_code=404,
-            detail="Complaint not found"
-        )
-
-    return {
-        "success": True,
-        "data": {
-            "id": complaint.id,
-            "complaint_source": complaint.complaint_source,
-            "complaint_category": complaint.complaint_category,
-            "customer_name": complaint.customer_name,
-            "organization": complaint.organization,
-            "email": complaint.email,
-            "country": complaint.country,
-
-            "product_name": complaint.product_name,
-            "material_type": complaint.material_type,
-            "dosage_form": complaint.dosage_form,
-            "strength": complaint.strength,
-            "batch_number": complaint.batch_number,
-            "manufacture_date": complaint.manufacture_date,
-            "expiration_date": complaint.expiration_date,
-
-            "category": complaint.category,
-            "description": complaint.description,
-
-            "risk_level": complaint.risk_level,
-            "risk_score": complaint.risk_score,
-            "risk_reason": complaint.risk_reason,
-            "completeness_score": complaint.completeness_score,
-
-            "summary": complaint.summary,
-
-            "root_cause_suggestions": (
-                complaint.root_cause_suggestions.split("\n")
-                if complaint.root_cause_suggestions
-                else []
-            ),
-
-            "capa_recommendations": (
-                complaint.capa_recommendations.split("\n")
-                if complaint.capa_recommendations
-                else []
-            ),
-
-            "status": complaint.status,
-            "created_at": complaint.created_at,
-        }
-    }
-
 @router.get("/stats")
 def get_complaint_stats(
     db: Session = Depends(get_db)
@@ -232,5 +169,67 @@ def get_complaint_stats(
             "high_risk": high_risk,
             "open": open_complaints,
             "average_completeness": average_completeness
+        }
+    }
+
+@router.get("/{complaint_id}")
+def get_complaint(
+    complaint_id: int,
+    db: Session = Depends(get_db)
+):
+    complaint = (
+        db.query(Complaint)
+        .filter(Complaint.id == complaint_id)
+        .first()
+    )
+
+    if not complaint:
+        raise HTTPException(
+            status_code=404,
+            detail="Complaint not found"
+        )
+
+    return {
+        "success": True,
+        "data": {
+            "id": complaint.id,
+            "source": complaint.source,
+            "category": complaint.category,
+            "customer_name": complaint.customer_name,
+            "organization": complaint.organization,
+            "email": complaint.email,
+            "country": complaint.country,
+
+            "product_name": complaint.product_name,
+            "material_type": complaint.material_type,
+            "dosage_form": complaint.dosage_form,
+            "strength": complaint.strength,
+            "batch_number": complaint.batch_number,
+            "manufacture_date": complaint.manufacture_date,
+            "expiration_date": complaint.expiration_date,
+
+            "description": complaint.description,
+
+            "risk_level": complaint.risk_level,
+            "risk_score": complaint.risk_score,
+            "risk_reason": complaint.risk_reason,
+            "completeness_score": complaint.completeness_score,
+
+            "summary": complaint.summary,
+
+            "root_cause_suggestions": (
+                complaint.root_cause_suggestions.split("\n")
+                if complaint.root_cause_suggestions
+                else []
+            ),
+
+            "capa_recommendations": (
+                complaint.capa_recommendations.split("\n")
+                if complaint.capa_recommendations
+                else []
+            ),
+
+            "status": complaint.status,
+            "created_at": complaint.created_at,
         }
     }

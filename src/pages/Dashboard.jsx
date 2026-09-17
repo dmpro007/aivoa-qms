@@ -1,27 +1,35 @@
 import { useEffect, useState } from "react";
-import { Eye, RefreshCw } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { PlusCircle, RefreshCw, ArrowUpRight } from "lucide-react";
 
-function Complaints() {
+import DashboardCards from "../components/DashboardCards";
+import ComplaintTable from "../components/ComplaintTable";
+import { getComplaints, getComplaintStats } from "../services/complaintApi";
+
+function Dashboard() {
   const [complaints, setComplaints] = useState([]);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const fetchComplaints = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
+      setError("");
 
-      const response = await axios.get(
-        "http://localhost:8000/api/complaints"
-      );
+      const [complaintsRes, statsRes] = await Promise.all([
+        getComplaints(),
+        getComplaintStats(),
+      ]);
 
-      setComplaints(response.data.data);
-    } catch (error) {
-      console.error(
-        "Failed to fetch complaints:",
-        error
+      setComplaints(complaintsRes.data || []);
+      setStats(statsRes.data || null);
+    } catch (err) {
+      console.error("Failed to load dashboard data:", err);
+      setError(
+        "Unable to reach the AIVOA API. Make sure the backend is running on port 8000."
       );
     } finally {
       setLoading(false);
@@ -29,148 +37,69 @@ function Complaints() {
   };
 
   useEffect(() => {
-    fetchComplaints();
+    loadData();
   }, []);
 
-  const handleViewComplaint = (id) => {
-    console.log("Opening complaint:", id);
-    navigate(`/complaints/${id}`);
-  };
+  const recentComplaints = complaints.slice(0, 6);
 
   return (
-    <div className="complaints-page">
-
-      {/* Header */}
+    <div className="dashboard-page">
       <div className="page-header">
         <div>
-          <span className="breadcrumb">
-            Complaints
-          </span>
-
-          <h1>Customer Complaints</h1>
-
+          <span className="breadcrumb">Overview</span>
+          <h1>Quality Dashboard</h1>
           <p>
-            View and manage pharmaceutical customer
-            complaints.
+            A real-time view of pharmaceutical customer complaints and
+            AI-assisted quality assessments.
           </p>
         </div>
 
-        <button
-          type="button"
-          className="btn-secondary"
-          onClick={fetchComplaints}
-        >
-          <RefreshCw size={16} />
-          Refresh
-        </button>
+        <div className="page-header-actions">
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={loadData}
+          >
+            <RefreshCw size={16} />
+            Refresh
+          </button>
+
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => navigate("/complaints/new")}
+          >
+            <PlusCircle size={16} />
+            New Complaint
+          </button>
+        </div>
       </div>
 
-      {/* Complaints Table */}
+      {error && <div className="ai-error dashboard-error">{error}</div>}
+
+      <DashboardCards stats={stats} loading={loading} />
+
       <div className="complaints-card">
+        <div className="card-header-row">
+          <div>
+            <h2>Recent Complaints</h2>
+            <p>The latest complaints logged into the system.</p>
+          </div>
+
+          <Link to="/complaints" className="link-button">
+            View all
+            <ArrowUpRight size={15} />
+          </Link>
+        </div>
 
         {loading ? (
-          <p className="empty-state">
-            Loading complaints...
-          </p>
-        ) : complaints.length === 0 ? (
-          <p className="empty-state">
-            No complaints found.
-          </p>
+          <p className="empty-state">Loading complaints...</p>
         ) : (
-          <div className="table-wrapper">
-
-            <table className="complaints-table">
-
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Customer</th>
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th>Risk</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {complaints.map((complaint) => (
-                  <tr key={complaint.id}>
-
-                    <td>
-                      <strong>
-                        #{complaint.id}
-                      </strong>
-                    </td>
-
-                    <td>
-                      <div className="customer-cell">
-                        <strong>
-                          {complaint.customer_name ||
-                            "Unknown"}
-                        </strong>
-
-                        <span>
-                          {complaint.organization ||
-                            "-"}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td>
-                      {complaint.product_name || "-"}
-                    </td>
-
-                    <td>
-                      {complaint.category || "-"}
-                    </td>
-
-                    <td>
-                      <span
-                        className={`risk-badge ${
-                          complaint.risk_level?.toLowerCase() ||
-                          ""
-                        }`}
-                      >
-                        {complaint.risk_level || "N/A"}
-                      </span>
-                    </td>
-
-                    <td>
-                      <span className="status-badge">
-                        {complaint.status}
-                      </span>
-                    </td>
-
-                    <td>
-                      <button
-                        type="button"
-                        className="icon-button"
-                        onClick={() =>
-                          handleViewComplaint(
-                            complaint.id
-                          )
-                        }
-                        title="View complaint"
-                      >
-                        <Eye size={18} />
-                      </button>
-                    </td>
-
-                  </tr>
-                ))}
-              </tbody>
-
-            </table>
-
-          </div>
+          <ComplaintTable complaints={recentComplaints} />
         )}
-
       </div>
-
     </div>
   );
 }
 
-export default Complaints;
-
+export default Dashboard;
